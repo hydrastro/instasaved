@@ -33,10 +33,16 @@ def parse_results(results):
       carousel_imgs = result["media"]["carousel_media"]
       # print("have carousel media")
       for img in carousel_imgs:
-        photo_urls.append(img["images"]["standard_resolution"]["url"])
+        try:
+          photo_urls.append(img["videos"]["standard_resolution"]["url"])
+        except KeyError as e:
+          photo_urls.append(img["images"]["standard_resolution"]["url"])
     except KeyError as e:
       # print("dont have it")
-      photo_urls.append(result["media"]["images"]["standard_resolution"]["url"])
+      try:
+        photo_urls.append(result["media"]["videos"]["standard_resolution"]["url"])
+      except KeyError as e:
+        photo_urls.append(result["media"]["images"]["standard_resolution"]["url"])
 
 results = api.saved_feed()
 # print(json.dumps(results["items"]))
